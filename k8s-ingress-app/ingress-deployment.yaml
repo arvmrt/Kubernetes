@@ -25,6 +25,7 @@ spec:
       app: eai-123461-home
   template:
     metadata:
+      namespace: lts-production
       labels:
         app: eai-123461-home
         environment: eai-123461-production
@@ -74,6 +75,7 @@ spec:
       app: eai-123461-sales
   template:
     metadata:
+      namespace: lts-production
       labels:
         app: eai-123461-sales
         environment: eai-123461-production
@@ -123,6 +125,7 @@ spec:
       app: eai-123461-cart
   template:
     metadata:
+      namespace: lts-production
       labels:
         app: eai-123461-cart
         environment: eai-123461-production
