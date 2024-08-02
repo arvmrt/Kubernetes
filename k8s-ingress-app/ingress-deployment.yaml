@@ -19,7 +19,7 @@ metadata:
     environment: eai-123461-production
     role: eai-123461-webserver
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: eai-123461-home
