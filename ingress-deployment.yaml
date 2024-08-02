@@ -1,0 +1,210 @@
+apiVersion: v1
+data:
+  .dockerconfigjson: eyAiYXV0aHMiOiB7ICJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOiB7ICJhdXRoIjogIllYSjJiWEowT21SamEzSmZjR0YwWDJreU5UZFFiQzFFVkVSSFVsaFROVGRmYlZoV2VsRnNkMXB4ZHc9PSIgfSB9IH0K
+kind: Secret
+metadata:
+  name: regcred-eai-123461
+  namespace: default
+type: kubernetes.io/dockerconfigjson
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eai-123461-homepage-deployment  
+  labels:
+    app: eai-123461-home
+    environment: eai-123461-production
+    role: eai-123461-webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eai-123461-home
+  template:
+    metadata:
+      labels:
+        app: eai-123461-home
+        environment: eai-123461-production
+        role: eai-123461-webserver
+    spec:
+      containers:
+      - name: lts-apache2
+        image: arvmrt/lts-home-apache24:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+        - name: regcred-eai-123461
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: eai-123461-service
+  labels:
+    app: eai-123461-home
+    environment: eai-123461-production
+spec:
+  selector:
+    app: eai-123461-home
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eai-123461-sales-deployment  
+  labels:
+    app: eai-123461-sales
+    environment: eai-123461-production
+    role: eai-123461-webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eai-123461-sales
+  template:
+    metadata:
+      labels:
+        app: eai-123461-sales
+        environment: eai-123461-production
+        role: eai-123461-webserver
+    spec:
+      containers:
+      - name: lts-sales-apache2
+        image: arvmrt/lts-sales-apache24:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+        - name: regcred-eai-123461
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: eai-123461-sales-service
+  labels:
+    app: eai-123461-sales
+    environment: eai-123461-production
+spec:
+  selector:
+    app: eai-123461-sales
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eai-123461-cart-deployment  
+  labels:
+    app: eai-123461-cart
+    environment: eai-123461-production
+    role: eai-123461-webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eai-123461-cart
+  template:
+    metadata:
+      labels:
+        app: eai-123461-cart
+        environment: eai-123461-production
+        role: eai-123461-webserver
+    spec:
+      containers:
+      - name: lts-cart-apache2
+        image: arvmrt/lts-cart-apache24:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+        - name: regcred-eai-123461
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: eai-123461-cart-service
+  labels:
+    app: eai-123461-cart
+    environment: eai-123461-production
+spec:
+  selector:
+    app: eai-123461-cart
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+
+---
+
+#apiVersion: networking.k8s.io/v1
+#kind: IngressClass
+#metadata:
+#  labels:
+#    app: eai-123461
+#    environment: eai-123461-production
+#  name: nginx
+#spec:
+#  controller: k8s.io/ingress-nginx
+#---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: eai-123461-ingress
+  labels:
+    app: eai-123461
+    environment: eai-123461-production
+  #annotations: 
+  #  nginx.ingress.kubernetes.io/rewrite-target: /
+
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: www.mylts.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: eai-123461-service
+            port:
+              number: 80
+      - path: /sales
+        pathType: Prefix
+        backend:
+          service:
+            name: eai-123461-sales-service
+            port:
+              number: 80
+      - path: /cart
+        pathType: Prefix
+        backend:
+          service:
+            name: eai-123461-cart-service
+            port:
+              number: 80
+  - host: "cart.lts.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: eai-123461-service
+            port:
+              number: 80             
