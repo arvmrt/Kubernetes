@@ -9,7 +9,7 @@ metadata:
 
 apiVersion: v1
 data:
-  .dockerconfigjson: eyAiYXV0aHMiOiB7ICJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOiB7ICJhdXRoIjogIllYSjJiWEowT21SamEzSmZjR0YwWDJreU5UZFFiQzFFVkVSSFVsaFROVGRmYlZoV2VsRnNkMXB4ZHc9PSIgfSB9IH0K
+  .dockerconfigjson: eyAiYXV0aHMiOiB7ICJodHRwczovL2luZgvnvngGV4LmRvY2tlci5pby92MS8iOiB7ICJhdXRoIjogjgjgdsdsIllYSjJiWEowT21SamEzSmZjR0YwWDJreU5UZFFiQzFFVkVSSFVsaFROVGRmYlZoV2VsRnNkMXB4ZHc9PSIgfSB9IH0K
 kind: Secret
 metadata:
   name: regcred-eai-123461
